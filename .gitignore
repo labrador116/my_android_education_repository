@@ -38,6 +38,7 @@ captures/
 *.idea
 .idea/
 */.idea
+/.idea/*
 
 # Keystore files
 *.jks
