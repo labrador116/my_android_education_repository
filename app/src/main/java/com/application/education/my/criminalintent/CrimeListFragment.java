@@ -38,7 +38,7 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-            mClickPosition=getActivity().getIntent().getIntExtra("com.application.education.my.criminalintent.CrimeActivity.position",0);
+            mClickPosition=getActivity().getIntent().getIntExtra(CrimePagerActivity.EXTRA_CRIME_POSITION,0);
         updateUI();
     }
 
@@ -96,7 +96,7 @@ public class CrimeListFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = CrimeActivity.newIntent(v.getContext(),mCrime.getId(), mPosition);
+                    Intent intent = CrimePagerActivity.newIntent(v.getContext(),mCrime.getId(), mPosition);
                     getActivity().startActivityForResult(intent, 0) ;
                 }
             });

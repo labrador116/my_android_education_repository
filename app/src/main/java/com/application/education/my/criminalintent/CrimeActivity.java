@@ -11,7 +11,7 @@ public class CrimeActivity extends SingleFragmentActivity{
 
     private static final String EXTRA_CRIME_ID =
             "com.application.education.my.criminalintent.CrimeActivity.crime_id";
-    private static final String EXTRA_CRIME_POSITION =
+    public static final String EXTRA_CRIME_POSITION =
             "com.application.education.my.criminalintent.CrimeActivity.position";
 
     public static Intent newIntent(Context packageContext, UUID crimeID, int position){

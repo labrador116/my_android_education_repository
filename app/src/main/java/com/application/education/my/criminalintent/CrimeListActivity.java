@@ -12,10 +12,10 @@ public class CrimeListActivity extends SingleFragmentActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int position= data.getIntExtra("com.application.education.my.criminalintent.CrimeActivity.position",0);
+        int position= data.getIntExtra(CrimePagerActivity.EXTRA_CRIME_POSITION,0);
 
         Intent intent =new Intent();
-        intent.putExtra("com.application.education.my.criminalintent.CrimeActivity.position", position);
+        intent.putExtra(CrimePagerActivity.EXTRA_CRIME_POSITION, position);
         setIntent(intent);
     }
 }
