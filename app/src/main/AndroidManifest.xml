@@ -12,6 +12,10 @@
 
         </activity>
 
+        <activity android:name=".SingleClass">
+
+        </activity>
+
         <activity android:name=".CrimeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

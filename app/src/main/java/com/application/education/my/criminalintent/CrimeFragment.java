@@ -51,7 +51,7 @@ public class CrimeFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime,container,false);
 
         mTitleField = (EditText)v.findViewById(R.id.crime_title);
@@ -77,7 +77,10 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
+
+
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(fragmentManager,DIALOG_DATE);
             }

@@ -17,19 +17,6 @@ public class CrimeLab {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private CrimeLab (Context context){
         mCrimes=new ArrayList<>();
-
-        for (int i=0;i<100; i++){
-            Crime crime = null;
-            try {
-                crime = new Crime(context);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            crime.setTitle("Crime #"+i);
-            crime.setSolved(i%2==0);
-            mCrimes.add(crime);
-        }
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -39,6 +26,10 @@ public class CrimeLab {
             sCrimaLab=new CrimeLab(context);
         }
         return sCrimaLab;
+    }
+
+    public void addCrime(Crime crime){
+        mCrimes.add(crime);
     }
 
     public List<Crime> getCrimes(){
