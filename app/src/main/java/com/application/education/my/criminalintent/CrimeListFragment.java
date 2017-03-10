@@ -1,13 +1,13 @@
 package com.application.education.my.criminalintent;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,6 +74,9 @@ public class CrimeListFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            case R.id.menu_item_show_subtitle:
+                updateSubtitle();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -89,6 +92,16 @@ public class CrimeListFragment extends Fragment {
         }else{
                 mCrimeAdapter.notifyItemChanged(mClickPosition);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    public void updateSubtitle(){
+        CrimeLab crimeLab = CrimeLab.getCrimaLab(getActivity());
+        int crimeCount = crimeLab.getCrimes().size();
+        String subtitle = getString(R.string.subtitle_format,crimeCount);
+
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
@@ -142,30 +155,6 @@ public class CrimeListFragment extends Fragment {
             mSolvedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_crime_checkbox);
         }
 
-        public TextView getTitleTextView() {
-            return mTitleTextView;
-        }
-
-        public void setTitleTextView(TextView titleTextView) {
-            mTitleTextView = titleTextView;
-        }
-
-        public TextView getDateTextView() {
-            return mDateTextView;
-        }
-
-        public void setDateTextView(TextView dateTextView) {
-            mDateTextView = dateTextView;
-        }
-
-        public CheckBox getSolvedCheckBox() {
-            return mSolvedCheckBox;
-        }
-
-        public void setSolvedCheckBox(CheckBox solvedCheckBox) {
-            mSolvedCheckBox = solvedCheckBox;
-        }
-
         public void bindCrime(Crime crime, int position){
             mCrime=crime;
             mPosition=position;
@@ -173,7 +162,6 @@ public class CrimeListFragment extends Fragment {
             mDateTextView.setText(mCrime.getDate().toString());
             mSolvedCheckBox.setChecked(mCrime.isSolved());
         }
-
     }
 
 }
