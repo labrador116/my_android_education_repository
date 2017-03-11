@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,5 +41,9 @@ public class CrimeLab {
                 return crime;
         }
         return null;
+    }
+
+    public void deleteCrime (Crime crime){
+        mCrimes.remove(crime);
     }
 }

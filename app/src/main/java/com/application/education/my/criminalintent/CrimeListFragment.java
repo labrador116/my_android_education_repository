@@ -23,14 +23,23 @@ import java.text.ParseException;
 import java.util.List;
 
 public class CrimeListFragment extends Fragment {
+    private final static String SAVE_POSITION_IN_BUNDLE  = "com.application.education.my.criminalintent.CrimeListFragment.save_position";
+    private final static String SAVED_SUBTITLE_VISIBLE = "com.application.education.my.criminalintent.CrimeListFragment.subtitle";
     private RecyclerView mRecyclerView;
     private CrimeAdapter mCrimeAdapter;
     private int mClickPosition;
     private int mPosit=0;
+    private boolean mSubtitleVisible;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState!=null) {
+            mPosit = savedInstanceState.getInt(SAVE_POSITION_IN_BUNDLE);
+            mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+        }
+
         setHasOptionsMenu(true);
     }
 
@@ -49,7 +58,9 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-            mClickPosition=getActivity().getIntent().getIntExtra(CrimePagerActivity.EXTRA_CRIME_POSITION,0);
+
+        mClickPosition=getActivity().getIntent().getIntExtra(CrimePagerActivity.EXTRA_CRIME_POSITION,0);
+        mCrimeAdapter=null;
         updateUI();
     }
 
@@ -57,6 +68,13 @@ public class CrimeListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_crime_list_menu,menu);
+
+        MenuItem subtitlesItem = menu.findItem(R.id.menu_item_show_subtitle);
+        if (mSubtitleVisible){
+           subtitlesItem.setTitle(R.string.hide_subtitle);
+        } else {
+            subtitlesItem.setTitle(R.string.show_subtitle);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -74,12 +92,23 @@ public class CrimeListFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
             case R.id.menu_item_show_subtitle:
+                mSubtitleVisible=!mSubtitleVisible;
+                getActivity().invalidateOptionsMenu();
                 updateSubtitle();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SAVE_POSITION_IN_BUNDLE,mPosit);
+        outState.putBoolean(SAVED_SUBTITLE_VISIBLE,mSubtitleVisible);
+        super.onSaveInstanceState(outState);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -92,6 +121,7 @@ public class CrimeListFragment extends Fragment {
         }else{
                 mCrimeAdapter.notifyItemChanged(mClickPosition);
         }
+        updateSubtitle();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -99,6 +129,10 @@ public class CrimeListFragment extends Fragment {
         CrimeLab crimeLab = CrimeLab.getCrimaLab(getActivity());
         int crimeCount = crimeLab.getCrimes().size();
         String subtitle = getString(R.string.subtitle_format,crimeCount);
+
+        if (!mSubtitleVisible){
+            subtitle=null;
+        }
 
         AppCompatActivity activity = (AppCompatActivity)getActivity();
         activity.getSupportActionBar().setSubtitle(subtitle);
