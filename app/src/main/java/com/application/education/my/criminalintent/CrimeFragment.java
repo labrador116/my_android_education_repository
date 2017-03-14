@@ -110,6 +110,13 @@ public class CrimeFragment extends Fragment {
         return v;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.getCrimaLab(getContext()).updateCrime(mCrime);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode!= CrimeActivity.RESULT_OK){

@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 
 public class CrimeListFragment extends Fragment {
     private final static String SAVE_POSITION_IN_BUNDLE  = "com.application.education.my.criminalintent.CrimeListFragment.save_position";
@@ -60,7 +61,7 @@ public class CrimeListFragment extends Fragment {
             public void onClick(View v) {
                 Crime crime = null;
                 try {
-                    crime = new Crime(getContext());
+                    crime = new Crime(UUID.randomUUID());
                     CrimeLab.getCrimaLab(getActivity()).addCrime(crime);
                     Intent intent = CrimePagerActivity.newIntent(getActivity(),crime.getId(),mPosit++);
                     startActivity(intent);
@@ -119,7 +120,7 @@ public class CrimeListFragment extends Fragment {
         switch(item.getItemId()){
             case R.id.menu_item_new_crime:
                 try {
-                    Crime crime = new Crime(getContext());
+                    Crime crime = new Crime(UUID.randomUUID());
                     CrimeLab.getCrimaLab(getActivity()).addCrime(crime);
                     Intent intent = CrimePagerActivity.newIntent(getActivity(),crime.getId(),mPosit++);
                     startActivity(intent);

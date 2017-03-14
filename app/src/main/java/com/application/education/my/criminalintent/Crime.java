@@ -1,7 +1,6 @@
 package com.application.education.my.criminalintent;
 
 
-import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -20,8 +19,8 @@ public class Crime {
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public Crime(Context context) throws ParseException {
-        mId = UUID.randomUUID();
+    public Crime(UUID id) throws ParseException {
+        mId = id;
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
