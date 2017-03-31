@@ -32,7 +32,6 @@ public class CrimeListFragment extends Fragment {
     private Button mCreateFirstCrimeButton;
     private TextView mCreateFirstCrimeTextView;
     private int mClickPosition;
-    private int mPosit=0;
     private boolean mSubtitleVisible;
 
     @Override
@@ -40,7 +39,6 @@ public class CrimeListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState!=null) {
-            mPosit = savedInstanceState.getInt(SAVE_POSITION_IN_BUNDLE);
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
 
@@ -63,7 +61,7 @@ public class CrimeListFragment extends Fragment {
                 try {
                     crime = new Crime(UUID.randomUUID());
                     CrimeLab.getCrimaLab(getActivity()).addCrime(crime);
-                    Intent intent = CrimePagerActivity.newIntent(getActivity(),crime.getId(),mPosit++);
+                    Intent intent = CrimePagerActivity.newIntent(getActivity(),crime.getId(),crime.getPosition());
                     startActivity(intent);
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -122,7 +120,8 @@ public class CrimeListFragment extends Fragment {
                 try {
                     Crime crime = new Crime(UUID.randomUUID());
                     CrimeLab.getCrimaLab(getActivity()).addCrime(crime);
-                    Intent intent = CrimePagerActivity.newIntent(getActivity(),crime.getId(),mPosit++);
+
+                    Intent intent = CrimePagerActivity.newIntent(getActivity(),crime.getId(),CrimeLab.getCrimaLab(getActivity()).getCrime(crime.getId()).getPosition());
                     startActivity(intent);
                     return true;
                 } catch (ParseException e) {
@@ -142,7 +141,6 @@ public class CrimeListFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SAVE_POSITION_IN_BUNDLE,mPosit);
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE,mSubtitleVisible);
         super.onSaveInstanceState(outState);
     }
@@ -155,7 +153,8 @@ public class CrimeListFragment extends Fragment {
             mCrimeAdapter = new CrimeAdapter(crimes);
             mRecyclerView.setAdapter(mCrimeAdapter);
         }else{
-                mCrimeAdapter.notifyItemChanged(mClickPosition);
+            mCrimeAdapter.setCrimes(crimes);
+            mCrimeAdapter.notifyItemChanged(mClickPosition);
         }
         updateSubtitle();
     }
@@ -198,6 +197,10 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mCrimes.size();
+        }
+
+        public void setCrimes(List<Crime> crimes){
+            mCrimes=crimes;
         }
     }
 
