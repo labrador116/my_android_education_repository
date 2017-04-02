@@ -1,14 +1,20 @@
 package com.application.education.my.criminalintent;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.ShareCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +31,16 @@ public class CrimeFragment extends Fragment {
     private final static String ARG_CRIME_ID = "crime_id";
     private final static String DIALOG_DATE = "DialogDate";
     private final static int REQUEST_DATE = 0;
+    private static final int REQUUEST_CONTACT = 1;
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
     private Button mDeleteButton;
+    private Button mReportButton;
+    private Button mSuspectButton;
+    private Button mCallToSuspectButton;
+    private int mIdSuspect;
 
 
     public  static CrimeFragment newInstance(UUID crimeId){
@@ -106,6 +117,65 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mReportButton = (Button) v.findViewById(R.id.crime_report_button);
+        mReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(Intent.ACTION_SEND);
+//                intent.setType("text/plain");
+//                intent.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
+//                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
+//                intent= Intent.createChooser(intent,getString(R.string.send_report));
+//                startActivity(intent);
+
+                ShareCompat.IntentBuilder.from(getActivity())
+                        .setType("text/plain")
+                        .setText(getCrimeReport())
+                        .setSubject(getString(R.string.crime_report_subject))
+                        .setChooserTitle(getString(R.string.send_report))
+                        .startChooser();
+
+
+            }
+        });
+
+        final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+
+        mSuspectButton = (Button) v.findViewById(R.id.crime_suspect_button);
+        mSuspectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(pickContact,REQUUEST_CONTACT);
+            }
+        });
+
+        if (mCrime.getSuspect()!=null){
+            mSuspectButton.setText(mCrime.getSuspect());
+        }
+
+        PackageManager packageManager = getActivity().getPackageManager();
+        if ( packageManager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY)==null){
+            mSuspectButton.setEnabled(false);
+        }
+
+        mCallToSuspectButton = (Button) v.findViewById(R.id.call_suspect_button);
+        mCallToSuspectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String phoneNumber = getSuspectPhoneNumber();
+
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+phoneNumber));
+
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+
+            }
+        });
+
+
 
         return v;
     }
@@ -129,11 +199,74 @@ public class CrimeFragment extends Fragment {
 
             updateDate();
         }
+
+        if (requestCode==REQUUEST_CONTACT && data !=null){
+            Uri contactUri = data.getData();
+            String [] queryFields = new String[]{ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID};
+
+            Cursor cursor = getContext().getContentResolver().query(contactUri,queryFields,null,null,null);
+
+            try {
+                if ( cursor.getCount() == 0){
+                    return;
+                }
+                cursor.moveToFirst();
+                mCrime.setAddressBookId(cursor.getInt(1));
+                String suspect = cursor.getString(0);
+                mCrime.setSuspect(suspect);
+                mSuspectButton.setText(suspect);
+            } finally {
+                cursor.close();
+            }
+        }
     }
 
     private void updateDate() {
         SimpleDateFormat postFormater = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
         String newDateStr = postFormater.format(mCrime.getDate());
         mDateButton.setText(newDateStr);
+    }
+    private String getCrimeReport () {
+        String solvedString  = null;
+
+        if (mCrime.isSolved()){
+            solvedString = getString(R.string.crime_report_solved);
+        }else {
+            solvedString = getString(R.string.crime_report_unsolved);
+        }
+
+        String dateFormat = "EEE, MMM dd";
+        String dateString = DateFormat.format(dateFormat,mCrime.getDate()).toString();
+
+        String suspect = mCrime.getSuspect();
+
+        if (suspect == null){
+            suspect=getString(R.string.crime_report_no_suspect);
+        }else{
+            suspect = getString(R.string.crime_report_suspect, suspect);
+        }
+
+        String report = getString(R.string.crime_report, mCrime.getTitle(), dateString, solvedString,suspect);
+
+        return report;
+    }
+
+    private String getSuspectPhoneNumber(){
+        Cursor cursor = getContext().getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[]{ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER},
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" =?",
+                new String[]{String.valueOf(mCrime.getAddressBookId())},
+                null);
+
+        try {
+            if(cursor.getCount()==0){
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getString(0);
+        }finally {
+            cursor.close();
+        }
     }
 }

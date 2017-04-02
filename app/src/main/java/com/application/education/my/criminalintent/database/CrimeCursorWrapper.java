@@ -32,6 +32,7 @@ public class CrimeCursorWrapper extends CursorWrapper {
         int isSolved = getInt(getColumnIndex(Columns.SOLVED));
         String suspect = getString(getColumnIndex(Columns.SUSPECT));
         int position = getInt(getColumnIndex("_id"));
+        int addressBookId=getInt(getColumnIndex(Columns.ADDRESS_BOOK_ID));
 
         Crime crime =new Crime(UUID.fromString(uuidString));
         crime.setTitle(title);
@@ -39,6 +40,7 @@ public class CrimeCursorWrapper extends CursorWrapper {
         crime.setSolved(isSolved!=0);
         crime.setSuspect(suspect);
         crime.setPosition(position);
+        crime.setAddressBookId(addressBookId);
 
         return crime;
     }

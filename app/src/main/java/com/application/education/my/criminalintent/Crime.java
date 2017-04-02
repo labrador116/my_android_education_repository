@@ -19,6 +19,16 @@ public class Crime {
     private String mSuspect;
     private int position;
 
+    public int getAddressBookId() {
+        return mAddressBookId;
+    }
+
+    public void setAddressBookId(int addressBookId) {
+        mAddressBookId = addressBookId;
+    }
+
+    private int mAddressBookId;
+
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public Crime(UUID id) throws ParseException {
