@@ -87,6 +87,10 @@ public class Crime {
     public void setPosition(int position) {
         this.position = position;
     }
+
+    public String getPhotoFilename(){
+        return "IMG_"+getId().toString()+".jpg";
+    }
 }
 
 

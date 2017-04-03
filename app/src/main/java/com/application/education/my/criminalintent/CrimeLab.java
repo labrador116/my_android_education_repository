@@ -5,12 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.RequiresApi;
 
 import com.application.education.my.criminalintent.database.CrimeBDSchema.CrimeTable;
 import com.application.education.my.criminalintent.database.CrimeBaseHelper;
 import com.application.education.my.criminalintent.database.CrimeCursorWrapper;
 
+import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,5 +129,15 @@ public class CrimeLab {
                 CrimeTable.Columns.UUID +" = ?",
                 new String[]{crime.getId().toString()}
         );
+    }
+
+    public File getPhotoFile(Crime crime){
+        File externalFilesDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        if(externalFilesDir==null){
+            return null;
+        }
+
+        return new File (externalFilesDir, crime.getPhotoFilename());
     }
 }
