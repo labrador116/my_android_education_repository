@@ -1,5 +1,6 @@
 package com.application.education.my.criminalintent;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -56,6 +57,11 @@ public class CrimeFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
     private File mPhotoFile;
+    private Callbacks mCallbacks;
+
+    public interface Callbacks{
+        void onCrimeUpdated (Crime crime);
+    }
 
 
     public  static CrimeFragment newInstance(UUID crimeId){
@@ -65,6 +71,12 @@ public class CrimeFragment extends Fragment {
         CrimeFragment fragment = new CrimeFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks)context;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -89,9 +101,11 @@ public class CrimeFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
+                updateCrime();
             }
 
             @Override
@@ -117,9 +131,11 @@ public class CrimeFragment extends Fragment {
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+                updateCrime();
             }
         });
 
@@ -230,10 +246,11 @@ public class CrimeFragment extends Fragment {
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-               updatePhotoView();
-            }
-        });
 
+            }
+
+        });
+        updatePhotoView();
 
         return v;
     }
@@ -245,6 +262,7 @@ public class CrimeFragment extends Fragment {
         CrimeLab.getCrimaLab(getContext()).updateCrime(mCrime);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode!= CrimeActivity.RESULT_OK){
@@ -254,7 +272,7 @@ public class CrimeFragment extends Fragment {
         if (requestCode==REQUEST_DATE){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
-
+            updateCrime();
             updateDate();
         }
 
@@ -272,6 +290,7 @@ public class CrimeFragment extends Fragment {
                 mCrime.setAddressBookId(cursor.getInt(1));
                 String suspect = cursor.getString(0);
                 mCrime.setSuspect(suspect);
+                updateCrime();
                 mSuspectButton.setText(suspect);
             } finally {
                 cursor.close();
@@ -279,8 +298,15 @@ public class CrimeFragment extends Fragment {
         }
 
         if(requestCode==REQUEST_PHOTO){
-            //updatePhotoView();
+            updateCrime();
+            updatePhotoView();
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks=null;
     }
 
     private void updateDate() {
@@ -339,5 +365,11 @@ public class CrimeFragment extends Fragment {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
             mPhotoView.setImageBitmap(bitmap);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void updateCrime(){
+        CrimeLab.getCrimaLab(getContext()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
     }
 }
