@@ -21,6 +21,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -224,7 +225,16 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        updatePhotoView();
+        ViewTreeObserver observer = mPhotoView.getViewTreeObserver();
+
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+               updatePhotoView();
+            }
+        });
+
+
         return v;
     }
 
@@ -269,7 +279,7 @@ public class CrimeFragment extends Fragment {
         }
 
         if(requestCode==REQUEST_PHOTO){
-            updatePhotoView();
+            //updatePhotoView();
         }
     }
 
