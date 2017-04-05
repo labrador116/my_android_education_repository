@@ -1,4 +1,4 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.data_adapter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import com.application.education.my.criminalintent.database.CrimeBDSchema.CrimeTable;
 import com.application.education.my.criminalintent.database.CrimeBaseHelper;
 import com.application.education.my.criminalintent.database.CrimeCursorWrapper;
+import com.application.education.my.criminalintent.model.Crime;
 
 import java.io.File;
 import java.text.ParseException;

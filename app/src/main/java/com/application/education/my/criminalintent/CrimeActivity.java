@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+import com.application.education.my.criminalintent.activities.SingleFragmentActivity;
+import com.application.education.my.criminalintent.fragments.CrimeFragment;
+
 import java.util.UUID;
 
-public class CrimeActivity extends SingleFragmentActivity{
+public class CrimeActivity extends SingleFragmentActivity {
 
     private static final String EXTRA_CRIME_ID =
             "com.application.education.my.criminalintent.CrimeActivity.crime_id";

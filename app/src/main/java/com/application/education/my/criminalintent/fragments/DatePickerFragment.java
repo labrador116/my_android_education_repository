@@ -1,21 +1,17 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.DatePicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.application.education.my.criminalintent.R;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +21,7 @@ import java.util.GregorianCalendar;
 public class DatePickerFragment extends DialogFragment {
 
     private final static String ARG_DATE = "date";
-    public final static String EXTRA_DATE ="com.application.education.my.criminalintent.DatePickerFragment.date";
+    public final static String EXTRA_DATE ="com.application.education.my.criminalintent.fragments.DatePickerFragment.date";
     private DatePicker mDatePicker;
 
     @Override

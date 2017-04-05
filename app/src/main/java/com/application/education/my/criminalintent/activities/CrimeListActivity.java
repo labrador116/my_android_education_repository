@@ -1,10 +1,14 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.activities;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+
+import com.application.education.my.criminalintent.fragments.CrimeFragment;
+import com.application.education.my.criminalintent.fragments.CrimeListFragment;
+import com.application.education.my.criminalintent.R;
+import com.application.education.my.criminalintent.model.Crime;
 
 public class CrimeListActivity extends SingleFragmentActivity implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks {
     @Override
@@ -15,15 +19,6 @@ public class CrimeListActivity extends SingleFragmentActivity implements CrimeLi
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_masterdetail;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int position= data.getIntExtra(CrimePagerActivity.EXTRA_CRIME_POSITION,0);
-
-        Intent intent =new Intent();
-        intent.putExtra(CrimePagerActivity.EXTRA_CRIME_POSITION, position);
-        setIntent(intent);
     }
 
     @Override
@@ -41,6 +36,6 @@ public class CrimeListActivity extends SingleFragmentActivity implements CrimeLi
     @Override
     public void onCrimeUpdated(Crime crime) {
         CrimeListFragment listFragment = (CrimeListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        listFragment.updateUI();
+        listFragment.updateUI(crime.getPosition());
     }
 }

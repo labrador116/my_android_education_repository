@@ -1,4 +1,4 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.model;
 
 
 import android.os.Build;

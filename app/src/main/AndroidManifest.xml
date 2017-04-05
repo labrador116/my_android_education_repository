@@ -13,17 +13,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CrimePagerActivity"
-            android:parentActivityName=".CrimeListActivity">
+        <activity android:name=".activities.CrimePagerActivity"
+            android:parentActivityName=".activities.CrimeListActivity">
 
 
         </activity>
 
-        <activity android:name=".SingleClass">
+        <activity android:name=".activities.SingleClass">
 
         </activity>
 
-        <activity android:name=".CrimeListActivity">
+        <activity android:name=".activities.CrimeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

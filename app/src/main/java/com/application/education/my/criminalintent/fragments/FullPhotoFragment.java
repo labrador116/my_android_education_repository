@@ -1,4 +1,4 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.fragments;
 
 
 import android.app.Dialog;
@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.application.education.my.criminalintent.R;
+import com.application.education.my.criminalintent.fragments.CrimeFragment;
 import com.application.education.my.criminalintent.utils.PictureUtils;
 
 import java.io.File;

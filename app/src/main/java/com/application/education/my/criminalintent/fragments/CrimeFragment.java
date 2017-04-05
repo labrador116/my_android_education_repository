@@ -1,4 +1,4 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +30,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.application.education.my.criminalintent.CrimeActivity;
+import com.application.education.my.criminalintent.data_adapter.CrimeLab;
+import com.application.education.my.criminalintent.R;
+import com.application.education.my.criminalintent.model.Crime;
 import com.application.education.my.criminalintent.utils.PictureUtils;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.application.education.my.criminalintent.fragments.CrimeFragment;
+import com.application.education.my.criminalintent.data_adapter.CrimeLab;
+import com.application.education.my.criminalintent.R;
+import com.application.education.my.criminalintent.model.Crime;
 
 import java.util.List;
 import java.util.UUID;

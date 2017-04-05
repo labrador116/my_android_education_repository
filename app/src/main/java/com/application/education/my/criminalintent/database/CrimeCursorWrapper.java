@@ -6,7 +6,7 @@ import android.database.CursorWrapper;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
-import com.application.education.my.criminalintent.Crime;
+import com.application.education.my.criminalintent.model.Crime;
 import com.application.education.my.criminalintent.database.CrimeBDSchema.CrimeTable.Columns;
 
 import java.text.ParseException;

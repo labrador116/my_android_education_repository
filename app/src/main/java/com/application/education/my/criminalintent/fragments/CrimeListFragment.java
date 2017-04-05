@@ -1,8 +1,7 @@
-package com.application.education.my.criminalintent;
+package com.application.education.my.criminalintent.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,13 +20,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.application.education.my.criminalintent.data_adapter.CrimeLab;
+import com.application.education.my.criminalintent.R;
+import com.application.education.my.criminalintent.activities.CrimePagerActivity;
+import com.application.education.my.criminalintent.model.Crime;
+
 import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
 public class CrimeListFragment extends Fragment {
-    private final static String SAVE_POSITION_IN_BUNDLE  = "com.application.education.my.criminalintent.CrimeListFragment.save_position";
-    private final static String SAVED_SUBTITLE_VISIBLE = "com.application.education.my.criminalintent.CrimeListFragment.subtitle";
+    private final static String SAVE_POSITION_IN_BUNDLE  = "com.application.education.my.criminalintent.fragments.CrimeListFragment.save_position";
+    private final static String SAVED_SUBTITLE_VISIBLE = "com.application.education.my.criminalintent.fragments.CrimeListFragment.subtitle";
     private RecyclerView mRecyclerView;
     private CrimeAdapter mCrimeAdapter;
     private Button mCreateFirstCrimeButton;
@@ -131,6 +135,7 @@ public class CrimeListFragment extends Fragment {
                 try {
                     Crime crime = new Crime(UUID.randomUUID());
                     CrimeLab.getCrimaLab(getActivity()).addCrime(crime);
+                    crime.setPosition(CrimeLab.getCrimaLab(getActivity()).getCrime(crime.getId()).getPosition());
                     updateUI();
                     mCallbacks.onCrimeSelected(crime,crime.getPosition());
                     return true;
@@ -165,6 +170,20 @@ public class CrimeListFragment extends Fragment {
         }else{
             mCrimeAdapter.setCrimes(crimes);
             mCrimeAdapter.notifyItemChanged(mClickPosition);
+        }
+        updateSubtitle();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    public void updateUI(int position){
+        CrimeLab crimeLab = CrimeLab.getCrimaLab(getActivity());
+        List<Crime> crimes = crimeLab.getCrimes();
+        if(mCrimeAdapter==null) {
+            mCrimeAdapter = new CrimeAdapter(crimes);
+            mRecyclerView.setAdapter(mCrimeAdapter);
+        }else{
+            mCrimeAdapter.setCrimes(crimes);
+            mCrimeAdapter.notifyItemChanged(position-1);
         }
         updateSubtitle();
     }
@@ -234,7 +253,7 @@ public class CrimeListFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCallbacks.onCrimeSelected(mCrime,mCrime.getPosition());
+                    mCallbacks.onCrimeSelected(mCrime,mPosition);
                 }
             });
 
