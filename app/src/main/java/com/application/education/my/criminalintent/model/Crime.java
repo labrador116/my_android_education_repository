@@ -18,15 +18,6 @@ public class Crime {
     private boolean mSolved;
     private String mSuspect;
     private int position;
-
-    public int getAddressBookId() {
-        return mAddressBookId;
-    }
-
-    public void setAddressBookId(int addressBookId) {
-        mAddressBookId = addressBookId;
-    }
-
     private int mAddressBookId;
 
 
@@ -90,6 +81,14 @@ public class Crime {
 
     public String getPhotoFilename(){
         return "IMG_"+getId().toString()+".jpg";
+    }
+
+    public int getAddressBookId() {
+        return mAddressBookId;
+    }
+
+    public void setAddressBookId(int addressBookId) {
+        mAddressBookId = addressBookId;
     }
 }
 
