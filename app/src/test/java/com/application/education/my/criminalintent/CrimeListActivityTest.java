@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.application.education.my.criminalintent.activities.CrimeListActivity;
+import com.application.education.my.criminalintent.activities.SingleFragmentActivity;
 import com.application.education.my.criminalintent.model.Crime;
 
 import org.junit.Test;
