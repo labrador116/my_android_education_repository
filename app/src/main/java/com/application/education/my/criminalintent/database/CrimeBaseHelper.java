@@ -18,6 +18,9 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, VERSION);
     }
 
+    public CrimeBaseHelper(Context context, String dbName) {
+        super(context, dbName, null, VERSION);
+    }
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + CrimeTable.NAME +
